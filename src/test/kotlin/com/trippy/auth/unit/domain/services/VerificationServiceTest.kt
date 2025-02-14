@@ -31,7 +31,7 @@ class VerificationServiceTest {
     fun `given a user should create a new verification and send an email`() = runBlocking {
         val user = UserSampler.sample()
 
-        every { verificationRepository.findByUserIdAndType(any(), any()) } returns null
+        every { verificationRepository.findAllByUserIdAndType(any(), any()) } returns listOf()
         justRun { mailGateway.send(any()) }
         every { verificationRepository.save(any()) } returns VerificationSampler.sample()
 
@@ -39,14 +39,14 @@ class VerificationServiceTest {
 
         verify { verificationRepository.save(any()) }
         verify { mailGateway.send(any()) }
-        verify { verificationRepository.findByUserIdAndType(user.id, VerificationType.EMAIL) }
+        verify { verificationRepository.findAllByUserIdAndType(user.id, VerificationType.EMAIL) }
     }
 
     @Test
     fun `given a user PASSWORD should create a new verification and send an email`() = runBlocking {
         val user = UserSampler.sample()
 
-        every { verificationRepository.findByUserIdAndType(any(), any()) } returns null
+        every { verificationRepository.findAllByUserIdAndType(any(), any()) } returns listOf()
         justRun { mailGateway.send(any()) }
         every { verificationRepository.save(any()) } returns VerificationSampler.sample()
 
@@ -54,28 +54,37 @@ class VerificationServiceTest {
 
         verify { verificationRepository.save(any()) }
         verify { mailGateway.send(any()) }
-        verify { verificationRepository.findByUserIdAndType(user.id, VerificationType.PASSWORD) }
+        verify { verificationRepository.findAllByUserIdAndType(user.id, VerificationType.PASSWORD) }
     }
 
     @Test
     fun `given a user when spam time is not passed should not create a new verification`() = runBlocking {
         val user = UserSampler.sample()
 
-        every { verificationRepository.findByUserIdAndType(any(), any()) } returns VerificationSampler.sample()
+        every {
+            verificationRepository.findAllByUserIdAndType(
+                any(),
+                any()
+            )
+        } returns listOf(VerificationSampler.sample())
 
         verificationService.send(user, VerificationType.EMAIL)
 
         verify(exactly = 0) { verificationRepository.save(any()) }
         verify(exactly = 0) { mailGateway.send(any()) }
-        verify { verificationRepository.findByUserIdAndType(user.id, VerificationType.EMAIL) }
+        verify { verificationRepository.findAllByUserIdAndType(user.id, VerificationType.EMAIL) }
     }
 
     @Test
     fun `given a user should create a new verification and send an email if spam time has passed`() = runBlocking {
         val user = UserSampler.sample()
 
-        every { verificationRepository.findByUserIdAndType(any(), any()) } returns VerificationSampler.sample()
-            .copy(createdAt = LocalDateTime.now().plusMinutes(-10))
+        every {
+            verificationRepository.findAllByUserIdAndType(
+                any(),
+                any()
+            )
+        } returns listOf(VerificationSampler.sample().copy(createdAt = LocalDateTime.now().plusMinutes(-10)))
         justRun { mailGateway.send(any()) }
         every { verificationRepository.save(any()) } returns VerificationSampler.sample()
 
@@ -83,7 +92,7 @@ class VerificationServiceTest {
 
         verify { verificationRepository.save(any()) }
         verify { mailGateway.send(any()) }
-        verify { verificationRepository.findByUserIdAndType(user.id, VerificationType.EMAIL) }
+        verify { verificationRepository.findAllByUserIdAndType(user.id, VerificationType.EMAIL) }
     }
 
     @Test

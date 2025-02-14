@@ -9,6 +9,7 @@ import com.trippy.auth.domain.services.RoleService
 import com.trippy.auth.domain.services.SessionService
 import com.trippy.auth.domain.services.UserService
 import com.trippy.auth.domain.services.VerificationService
+import com.trippy.auth.domain.utils.Constants
 import com.trippy.auth.unit.domain.models.RoleSampler
 import com.trippy.auth.unit.domain.models.UserSampler
 import com.trippy.auth.unit.domain.models.VerificationSampler
@@ -45,6 +46,7 @@ class UserServiceTest {
 
         verify { userRepository.existsByEmail(user.email) }
         verify { userRepository.save(any()) }
+        verify { roleService.findByName(Constants.ROLE_USER) }
     }
 
     @Test

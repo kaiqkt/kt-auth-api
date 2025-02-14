@@ -6,7 +6,7 @@ spring:
   application:
     name: kt-auth-api
   profiles:
-    active: local
+    active: ${PROFILE}
 
 springdoc:
   api-docs:

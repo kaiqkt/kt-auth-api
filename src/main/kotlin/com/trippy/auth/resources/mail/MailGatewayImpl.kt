@@ -11,6 +11,8 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Component
 import java.nio.file.Files
+import kotlin.io.inputStream
+import kotlin.text.replace
 
 @Component
 class MailGatewayImpl(
@@ -38,9 +40,9 @@ class MailGatewayImpl(
     }
 
     private fun renderTemplate(email: Email): String {
-        val resource = ClassPathResource(email.template)
-        val file = resource.file
+        val inputStream =  ClassPathResource(email.template).inputStream
+        val template = inputStream.bufferedReader().use { it.readText() }
 
-        return StringSubstitutor(email.data).replace(Files.readString(file.toPath()))
+        return StringSubstitutor(email.data).replace(template)
     }
 }

@@ -1,0 +1,42 @@
+---
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: ${POSTGRESQL_URL}
+    username: ${POSTGRESQL_USERNAME}
+    password: ${POSTGRESQL_PASSWORD}
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    placeholders:
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    placeholder-replacement: true
+  mail:
+    default-encoding: UTF-8
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    port: ${MAIL_PORT}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_AUTH_ENABLED}
+          starttls:
+            enable: ${MAIL_STARTTLS_ENABLED}
+    protocol: smtp
+    test-connection: false
+  web:
+    locale: en_US
+    locale-resolver: fixed
+
+service-url: ${SERVICE_URL}
+
+springtools:
+  jwt-secret: ${JWT_SECRET}
+  access-token: ${ACCESS_TOKEN}
+  refresh-token-secret: ${REFRESH_TOKEN_SECRET}
+  refresh-token-expiration: 7 # 7 days
+  jwt-token-expiration: 30  # 30 minutes

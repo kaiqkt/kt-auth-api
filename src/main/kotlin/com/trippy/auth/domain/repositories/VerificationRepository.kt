@@ -10,9 +10,10 @@ import org.springframework.stereotype.Repository
 interface VerificationRepository : JpaRepository<Verification, String> {
     @Query(
         "SELECT v FROM Verification v " +
-                "WHERE v.user.id = :userId AND v.type = :type AND v.expireAt > CURRENT_TIMESTAMP"
+                "WHERE v.user.id = :userId AND v.type = :type AND v.expireAt > CURRENT_TIMESTAMP " +
+                "ORDER BY v.createdAt DESC"
     )
-    fun findByUserIdAndType(userId: String, type: VerificationType): Verification?
+    fun findAllByUserIdAndType(userId: String, type: VerificationType): List<Verification>
 
     @Query(
         "SELECT v FROM Verification v " +

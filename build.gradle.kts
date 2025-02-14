@@ -128,7 +128,8 @@ val excludePackages: List<String> by extra {
 		"com/trippy/auth/application/web/responses/*",
 		"com/trippy/auth/domain/models/*",
 		"com/trippy/auth/domain/utils/*",
-		"com/trippy/auth/domain/dtos/*"
+		"com/trippy/auth/domain/dtos/*",
+		"com/trippy/auth/resources/mail/MailGateway*",
 	)
 }
 

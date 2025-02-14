@@ -26,7 +26,7 @@ class VerificationService(
     private val log = LoggerFactory.getLogger(this::class.java)
 
     suspend fun send(user: User, type: VerificationType) {
-        var verification = verificationRepository.findByUserIdAndType(user.id, type)
+        var verification = verificationRepository.findAllByUserIdAndType(user.id, type).firstOrNull()
 
         if (verification != null
             && verification.createdAt.plusMinutes(Constants.EMAIL_VERIFICATION_SPAM_DELAY) > LocalDateTime.now()

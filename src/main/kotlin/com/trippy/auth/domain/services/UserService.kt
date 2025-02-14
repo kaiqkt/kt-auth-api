@@ -32,7 +32,7 @@ class UserService(
             throw DomainException(ErrorType.EMAIL_ALREADY_EXISTS)
         }
 
-        val role = roleService.findByName(Constants.ROLE_ADMIN)
+        val role = roleService.findByName(Constants.ROLE_USER)
 
         return user.copy(roles = listOf(role).toMutableList()).let {
             userRepository.save(it).also {

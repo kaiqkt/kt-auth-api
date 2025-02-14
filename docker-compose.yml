@@ -10,7 +10,44 @@ services:
       POSTGRES_DB: kt_auth_api
     ports:
       - "5432:5432"
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"  # SMTP PORT
+      - "8025:8025"  # Web Interface
+    restart: always
+  kt-auth-api:
+    container_name: kt-auth-api
+    image: kt-auth-api:latest
+    restart: always
+    depends_on:
+      - postgres
+      - mailhog
+    environment:
+      PROFILE: prod
+      POSTGRESQL_URL: jdbc:postgresql://postgres:5432/kt_auth_api
+      POSTGRESQL_USERNAME: auth_api
+      POSTGRESQL_PASSWORD: mypwd
+      ADMIN_EMAIL: admin@kt.com
+      ADMIN_PASSWORD: $2a$10$wrsD3FKU6Fo8Vy1VBui51O29uSTeHpmYJChaK6bT4CULrx8d9H.tG  # @Admin1234#
+      MAIL_USERNAME: admin@kt.com
+      MAIL_PASSWORD: ""
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_AUTH_ENABLED: false
+      MAIL_STARTTLS_ENABLED: false
+      SERVICE_URL: http://localhost:8080
+      JWT_SECRET: world
+      ACCESS_TOKEN: world
+      REFRESH_TOKEN_SECRET: world
+    ports:
+      - "8080:8080"
 
 volumes:
   postgres:
+    driver: local
+  kt-auth-api:
+    driver: local
+  mailhog:
     driver: local
