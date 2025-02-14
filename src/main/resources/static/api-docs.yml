@@ -1,0 +1,974 @@
+---
+
+openapi: 3.0.3
+info:
+  title: "demo-api"
+  version: 1.0.0
+  description: >-
+    demo api.
+  license:
+    name: Apache-2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+
+
+paths:
+  /role:
+    post:
+      tags:
+        - role
+      description: Create a role
+      operationId: create
+      security:
+        - JwtToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_role_v1+json:
+            schema:
+              $ref: '#/components/schemas/RoleRequestV1'
+      responses:
+        200:
+          description: Role created
+          content:
+            application/vnd.trippy_auth_api_role_v1+json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /role/{id}:
+    patch:
+      tags:
+        - role
+      description: Update a existent role
+      operationId: update
+      security:
+        - JwtToken: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Role id
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_role_v1+json:
+            schema:
+              $ref: '#/components/schemas/UpdateRoleRequestV1'
+      responses:
+        200:
+          description: Role updated
+          content:
+            application/vnd.trippy_auth_api_role_v1+json:
+              schema:
+                $ref: '#/components/schemas/RoleResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        404:
+          description: Role not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /roles:
+    delete:
+      tags:
+        - role
+      description: Delete a role
+      operationId: delete
+      security:
+        - JwtToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_role_v1+json:
+            schema:
+              $ref: '#/components/schemas/DeleteRolesRequestV1'
+      responses:
+        200:
+          description: Roles deleted
+    get:
+      tags:
+        - role
+      description: Get all roles
+      operationId: getAll
+      security:
+        - JwtToken: [ ]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 20
+            maximum: 999
+          required: false
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "DESC"
+          required: false
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            default: "createdAt"
+          required: false
+        - in: query
+          name: query
+          schema:
+            type: string
+          required: false
+          description: "Query can be a role id or name"
+      responses:
+        200:
+          description: Roles found
+          content:
+            application/vnd.trippy_auth_api_page_v1+json:
+              schema:
+                $ref: '#/components/schemas/PageResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /login:
+    post:
+      tags:
+        - authentication
+      description: Authenticate user
+      operationId: login
+      parameters:
+        - in: header
+          name: X-Forwarded-For
+          schema:
+            type: string
+          required: false
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_auth_v1+json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestV1'
+      responses:
+        200:
+          description: User authenticated
+          content:
+            application/vnd.trippy_auth_api_auth_v1+json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        401:
+          description: Invalid credential or email is not verified
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        404:
+          description: User not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /refresh:
+    post:
+      tags:
+        - authentication
+      description: Refresh token
+      operationId: refresh
+      parameters:
+        - in: header
+          name: X-Forwarded-For
+          schema:
+            type: string
+          required: false
+        - in: header
+          name: X-Refresh-Token
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: Token refreshed
+          content:
+            application/vnd.trippy_auth_api_auth_v1+json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        401:
+          description: Session not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /verify:
+    post:
+      tags:
+        - authentication
+      description: Verify session
+      operationId: verify
+      security:
+        - JwtToken: [ ]
+      responses:
+        200:
+          description: Session verified
+          content:
+            application/vnd.trippy_auth_api_auth_verify_v1+json:
+              schema:
+                $ref: '#/components/schemas/VerifiedSessionResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /sessions:
+    get:
+      tags:
+        - session
+      description: Get all sessions
+      operationId: getAll
+      security:
+        - JwtToken: [ ]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 20
+            maximum: 999
+          required: false
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "DESC"
+          required: false
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            default: "createdAt"
+          required: false
+        - in: query
+          name: id
+          schema:
+            type: string
+          required: false
+          description: "If the JWTToken has a ROLE_ADMIN the id can be a user id or a session id, if dont will return based on the user_id of the token"
+      responses:
+        200:
+          description: Sessions found
+          content:
+            application/vnd.trippy_auth_api_page_v1+json:
+              schema:
+                $ref: '#/components/schemas/PageResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /session/{session_id}/revoke:
+    patch:
+      tags:
+        - session
+      description: Revoke a session
+      operationId: revoke
+      security:
+        - JwtToken: [ ]
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          description: Session id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Session revoked
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /session/revoke/current:
+    patch:
+      tags:
+        - session
+      description: Revoke current session
+      operationId: revokeCurrent
+      security:
+        - JwtToken: [ ]
+      responses:
+        200:
+          description: Session revoked
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /sessions/revoke:
+    patch:
+      tags:
+        - session
+      description: Revoke all user sessions
+      operationId: revokeAll
+      security:
+        - JwtToken: [ ]
+      responses:
+        200:
+          description: Sessions revoked
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /sessions/revoke/all:
+    patch:
+      tags:
+        - session
+      description: Revoke all session by the given ids
+      operationId: revokeAllByIds
+      security:
+        - JwtToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_session_v1+json:
+            schema:
+              $ref: '#/components/schemas/IdsRequestV1'
+      responses:
+        200:
+          description: Sessions revoked
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /user:
+    post:
+      tags:
+        - user
+      description: Create a user
+      operationId: create
+      security:
+        - JwtToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_user_v1+json:
+            schema:
+              $ref: '#/components/schemas/UserRequestV1'
+      responses:
+        200:
+          description: User created
+          content:
+            application/vnd.trippy_auth_api_user_v1+json:
+              schema:
+                $ref: '#/components/schemas/UserResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+    get:
+      tags:
+        - user
+      description: Find user information by his jwt token
+      operationId: findCurrent
+      security:
+        - JwtToken: [ ]
+      responses:
+        200:
+          description: User created
+          content:
+            application/vnd.trippy_auth_api_user_v1+json:
+              schema:
+                $ref: '#/components/schemas/UserResponseV1'
+        404:
+          description: User not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /user/{user_id}/role:
+    post:
+      tags:
+        - user
+      description: Add roles to a user
+      operationId: addRoles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User id
+          schema:
+            type: string
+      security:
+        - JwtToken: [ ]
+        - AccessToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_user_v1+json:
+            schema:
+              $ref: '#/components/schemas/IdsRequestV1'
+      responses:
+        200:
+          description: Roles added
+          content:
+            application/vnd.trippy_auth_api_user_v1+json:
+              schema:
+                $ref: '#/components/schemas/UserResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        404:
+          description: User not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+    delete:
+      tags:
+        - user
+      description: Remove roles of a user
+      operationId: removeRoles
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User id
+          schema:
+            type: string
+      security:
+        - JwtToken: [ ]
+        - AccessToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_user_v1+json:
+            schema:
+              $ref: '#/components/schemas/IdsRequestV1'
+      responses:
+        200:
+          description: Roles removed
+          content:
+            application/vnd.trippy_auth_api_user_v1+json:
+              schema:
+                $ref: '#/components/schemas/UserResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        404:
+          description: User not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /user/{user_id}:
+    get:
+      tags:
+        - user
+      description: Find user information by his id
+      operationId: findById
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: User id
+          schema:
+            type: string
+      security:
+        - JwtToken: [ ]
+        - AccessToken: [ ]
+      responses:
+        200:
+          description: User found
+          content:
+            application/vnd.trippy_auth_api_user_v1+json:
+              schema:
+                $ref: '#/components/schemas/UserResponseV1'
+        404:
+          description: User not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /user/password:
+    patch:
+      tags:
+        - user
+      description: Update user password
+      operationId: updatePassword
+      security:
+        - JwtToken: [ ]
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_user_v1+json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequestV1'
+      responses:
+        200:
+          description: Roles added
+          content:
+            application/vnd.trippy_auth_api_user_v1+json:
+              schema:
+                $ref: '#/components/schemas/UserResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+        404:
+          description: User not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /users:
+    get:
+      tags:
+        - user
+      description: Get all users
+      operationId: getAll
+      security:
+        - JwtToken: [ ]
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          required: false
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 20
+            maximum: 999
+          required: false
+        - in: query
+          name: sort
+          schema:
+            type: string
+            default: "DESC"
+          required: false
+        - in: query
+          name: orderBy
+          schema:
+            type: string
+            default: "createdAt"
+          required: false
+        - in: query
+          name: query
+          schema:
+            type: string
+          required: false
+          description: "Query can be a user id or email"
+      responses:
+        200:
+          description: Users found
+          content:
+            application/vnd.trippy_auth_api_page_v1+json:
+              schema:
+                $ref: '#/components/schemas/PageResponseV1'
+        400:
+          description: Invalid payload
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /user/verify-email:
+    get:
+      tags:
+        - user
+      description: Verify user email
+      operationId: verifyEmail
+      parameters:
+        - name: code
+          in: query
+          required: true
+          description: Verification code
+          schema:
+            type: string
+      responses:
+        200:
+          description: Email verified
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html><body>Email verified</body></html>"
+        404:
+          description: Email verification code not found
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "<html><body>Email verification failed</body></html>"
+  /user/reset-password:
+    post:
+      tags:
+        - user
+      description: Reset user password request
+      operationId: resetPasswordRequest
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_user_v1+json:
+            schema:
+              $ref: '#/components/schemas/SendResetPasswordRequestV1'
+      responses:
+        200:
+          description: Reset password request sent successfully
+        404:
+          description: User not found
+          content:
+            application/vnd.trippy_auth_api_error_v1+json:
+              schema:
+                $ref: '#/components/schemas/ErrorV1'
+  /user/{code}/reset-password:
+    post:
+      tags:
+        - user
+      description: Reset user password updated
+      operationId: resetPassword
+      parameters:
+        - name: code
+          in: path
+          required: true
+          description: Code for update password by a forget password request
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/vnd.trippy_auth_api_user_v1+json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequestV1'
+      responses:
+        200:
+          description: Password update successfully
+
+components:
+  schemas:
+    ResetPasswordRequestV1:
+      type: object
+      properties:
+        new_password:
+          type: string
+          example: "password"
+          x-field-extra-annotation: '@field:Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "password must be at least 8 characters long and include at least one letter, one special character, and one number")'
+      required:
+        - new_password
+
+    SendResetPasswordRequestV1:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "test@email.com"
+      required:
+        - email
+
+    PasswordRequestV1:
+      type: object
+      properties:
+        new_password:
+          type: string
+          example: "password"
+          x-field-extra-annotation: '@field:Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "password must be at least 8 characters long and include at least one letter, one special character, and one number")'
+        old_password:
+          type: string
+          example: "password"
+      required:
+        - new_password
+        - old_password
+
+    UserResponseV1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "01E5ZQZQZQZQZQZQZQZQZQZQZ"
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Pork"
+        email:
+          type: string
+          example: "test@email.com"
+        is_verified:
+          type: boolean
+          example: false
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleResponseV1'
+        created_at:
+          type: string
+          example: "2021-01-01T00:00:00Z"
+        updated_at:
+          type: string
+          example: "2021-01-01T00:00:00Z"
+      required:
+        - id
+        - first_name
+        - is_verified
+        - email
+        - roles
+        - created_at
+
+    UserRequestV1:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: "John"
+          x-field-extra-annotation: '@field:Size(min=1, max=255, message = "first name size must be between 1 to 255 characters")'
+        last_name:
+          type: string
+          example: "Pork"
+          x-field-extra-annotation: '@field:Size(max=255, message = "last name must not exceed 255 characters")'
+        email:
+          type: string
+          example: "test@email.com"
+          x-field-extra-annotation: '@field:jakarta.validation.constraints.NotEmpty(message = "email must not be empty") @field:jakarta.validation.constraints.Email(message = "email must be a valid address")'
+        password:
+          type: string
+          example: "password"
+          x-field-extra-annotation: '@field:Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "password must be at least 8 characters long and include at least one letter, one special character, and one number")'
+      required:
+        - first_name
+        - email
+        - password
+
+    IdsRequestV1:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          x-field-extra-annotation: '@field:jakarta.validation.constraints.NotEmpty(message = "ids must not be empty")'
+      required:
+        - ids
+
+    SessionResponseV1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "01E5ZQZQZQZQZQZQZQZQZQZQZ"
+        user_id:
+          type: string
+          example: "01E5ZQZQZQZQZQZQZQZQZQZQZ"
+        ip:
+          type: string
+          example: "192.0.0.1"
+        created_at:
+          type: string
+          example: "2021-01-01T00:00:00Z"
+        updated_at:
+          type: string
+          example: "2021-01-01T00:00:00Z"
+        expire_at:
+          type: string
+          example: "2021-01-01T00:00:00Z"
+        revoked_at:
+          type: string
+          example: "2021-01-01T00:00:00Z"
+      required:
+        - id
+        - user_id
+        - created_at
+        - expire_at
+
+    VerifiedSessionResponseV1:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+          example: true
+      required:
+        - is_valid
+
+    AuthenticationResponseV1:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        refresh_token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+      required:
+        - access_token
+        - refresh_token
+
+    LoginRequestV1:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "test@email.com"
+          x-field-extra-annotation: '@field:jakarta.validation.constraints.NotEmpty(message = "email must not be empty")'
+        password:
+          type: string
+          example: "password"
+          x-field-extra-annotation: '@field:jakarta.validation.constraints.NotEmpty(message = "password must not be empty")'
+      required:
+        - email
+        - password
+
+    DeleteRolesRequestV1:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          example: [ "01E5ZQZQZQZQZQZQZQZQZQZQZ", "01E5ZQZQZQZQZQZQZQZQZQZQ" ]
+          description: "List of role ids"
+      required:
+        - ids
+
+    UpdateRoleRequestV1:
+      type: object
+      properties:
+        description:
+          type: string
+          example: "Role for administrator purpose only"
+          x-field-extra-annotation: '@field:Size(min=1, max=255, message = "description size must be between 1 to 255 characters")'
+      required:
+        - description
+
+    RoleResponseV1:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "01E5ZQZQZQZQZQZQZQZQZQZQZQ"
+        name:
+          type: string
+          example: "ADMIN"
+        description:
+          type: string
+          example: "Role for administrator purpose only"
+        created_at:
+          type: string
+          example: "2021-01-01T00:00:00Z"
+      required:
+        - id
+        - name
+        - created_at
+
+    RoleRequestV1:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "ADMIN"
+          x-field-extra-annotation: '@field:Size(min=1, max=50, message = "name size must be between 1 to 50 characters")'
+          description: "Role name, if not provided with prefix ROLE_ will be added automatically"
+        description:
+          type: string
+          example: "Role for administrator purpose only"
+          x-field-extra-annotation: '@field:Size(max=255, message = "description should not exceed 255 characters")'
+      required:
+        - name
+
+    PageResponseV1:
+      type: object
+      properties:
+        total_elements:
+          type: integer
+          example: 2
+        total_pages:
+          type: integer
+          example: 1
+        current_page:
+          type: integer
+          example: 0
+        elements:
+          type: array
+          items:
+            type: object
+          example: [ "element1", "element2" ]
+
+    ErrorV1:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of error.
+        message:
+          type: string
+          nullable: true
+          description: The error message.
+        errors:
+          type: object
+          additionalProperties:
+            type: object
+          nullable: false
+          description: A map of additional error details.
+      required:
+        - type
+
+  securitySchemes:
+    JwtToken:
+      type: http
+      scheme: bearer
+    AccessToken:
+      type: apiKey
+      name: Authorization
+      in: header

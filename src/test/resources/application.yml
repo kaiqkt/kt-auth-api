@@ -1,0 +1,44 @@
+spring:
+    application:
+        name: kt-auth-api
+    datasource:
+      url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+      driver-class-name: org.h2.Driver
+      username: sa
+      password:
+    h2:
+      console:
+        enabled: true
+    jpa:
+      hibernate:
+        ddl-auto: create-drop
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.H2Dialect
+    flyway:
+      locations: classpath:db/migration
+      baseline-on-migrate: true
+      placeholders:
+        ADMIN_EMAIL: "admin@kt.com"
+        ADMIN_PASSWORD: "$2a$10$wrsD3FKU6Fo8Vy1VBui51O29uSTeHpmYJChaK6bT4CULrx8d9H.tG" # @Admin1234#
+      placeholder-replacement: true
+      clean-disabled: false
+    mail:
+      password: springboot
+      username: duke
+      host: 127.0.0.1
+      port: 3025
+      protocol: smtp
+    web:
+      locale: en_US
+      locale-resolver: fixed
+
+
+service-url: http://localhost:8080
+
+springtools:
+  jwt-secret: world
+  access-token: world
+  refresh-token-secret: world
+  refresh-token-expiration: 7 # 7 days
+  jwt-token-expiration: 30  # 30 minutes

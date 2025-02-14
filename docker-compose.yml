@@ -1,0 +1,16 @@
+---
+services:
+  postgres:
+    container_name: postgres-kt-auth
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: auth_api
+      POSTGRES_PASSWORD: mypwd
+      POSTGRES_DB: kt_auth_api
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres:
+    driver: local

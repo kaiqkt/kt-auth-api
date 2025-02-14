@@ -1,0 +1,17 @@
+---
+server:
+  port: 8080
+
+spring:
+  application:
+    name: kt-auth-api
+  profiles:
+    active: local
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
