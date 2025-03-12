@@ -90,7 +90,7 @@ kotlin {
 sourceSets {
 	main {
 		java {
-			srcDir("$buildDir/generated/src/main/kotlin")
+			srcDir("${layout.buildDirectory.get()}/generated/src/main/kotlin")
 		}
 	}
 }
@@ -99,9 +99,9 @@ openApiGenerate {
 	generatorName.set("kotlin-spring")
 	skipValidateSpec.set(true)
 	inputSpec.set("$rootDir/src/main/resources/static/api-docs.yml")
-	outputDir.set("$buildDir/generated")
-	apiPackage.set("com.trippy.auth.generated.application.web.controllers")
-	modelPackage.set("com.trippy.auth.generated.application.web.dtos")
+	outputDir.set("${layout.buildDirectory.get()}/generated")
+	apiPackage.set("com.kaiqkt.auth.generated.application.web.controllers")
+	modelPackage.set("com.kaiqkt.auth.generated.application.web.dtos")
 	configOptions.set(
 		mapOf(
 			"dateLibrary" to "java8",
@@ -120,16 +120,16 @@ tasks.withType<Test> {
 
 val excludePackages: List<String> by extra {
 	listOf(
-		"com/trippy/auth/generated/*",
+		"com/kaiqkt/auth/generated/*",
 		"org/openapitools/*",
-		"com/trippy/auth/Application*",
-		"com/trippy/auth/application/config/*",
-		"com/trippy/auth/application/web/requests/*",
-		"com/trippy/auth/application/web/responses/*",
-		"com/trippy/auth/domain/models/*",
-		"com/trippy/auth/domain/utils/*",
-		"com/trippy/auth/domain/dtos/*",
-		"com/trippy/auth/resources/mail/MailGateway*",
+		"com/kaiqkt/auth/Application*",
+		"com/kaiqkt/auth/application/config/*",
+		"com/kaiqkt/auth/application/web/requests/*",
+		"com/kaiqkt/auth/application/web/responses/*",
+		"com/kaiqkt/auth/domain/models/*",
+		"com/kaiqkt/auth/domain/utils/*",
+		"com/kaiqkt/auth/domain/dtos/*",
+		"com/kaiqkt/auth/resources/mail/MailGateway*",
 	)
 }
 

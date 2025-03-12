@@ -28,9 +28,6 @@ spring:
             enable: ${MAIL_STARTTLS_ENABLED}
     protocol: smtp
     test-connection: false
-  web:
-    locale: en_US
-    locale-resolver: fixed
 
 service-url: ${SERVICE_URL}
 

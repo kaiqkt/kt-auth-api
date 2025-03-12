@@ -7,6 +7,9 @@ spring:
     name: kt-auth-api
   profiles:
     active: ${PROFILE}
+  web:
+    locale: en_US
+    locale-resolver: fixed
 
 springdoc:
   api-docs:
