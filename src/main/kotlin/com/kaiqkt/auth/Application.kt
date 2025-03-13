@@ -8,7 +8,7 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication(exclude = [UserDetailsServiceAutoConfiguration::class])
-@ComponentScan(basePackages = ["com.kaiqkt", "com.kaiqkt"])
+@ComponentScan(basePackages = ["com.kaiqkt"])
 @EnableConfigurationProperties(AuthenticationProperties::class)
 class Application
 
