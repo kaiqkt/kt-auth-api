@@ -8,10 +8,10 @@ import com.kaiqkt.auth.domain.repositories.SessionRepository
 import com.kaiqkt.auth.domain.repositories.UserRepository
 import com.kaiqkt.auth.domain.repositories.VerificationRepository
 import com.kaiqkt.auth.domain.utils.AuthenticationProperties
-import com.kaiqkt.auth.domain.utils.TokenUtils
 import com.kaiqkt.auth.integration.utils.SpringMailMock
 import com.kaiqkt.auth.unit.domain.models.RoleSampler
 import com.kaiqkt.auth.unit.domain.models.UserSampler
+import com.kaiqkt.kt.tools.security.utils.TokenUtils
 import io.restassured.RestAssured
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll

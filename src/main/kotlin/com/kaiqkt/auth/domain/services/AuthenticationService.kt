@@ -5,7 +5,7 @@ import com.kaiqkt.auth.domain.exceptions.ErrorType
 import com.kaiqkt.auth.domain.models.Session
 import com.kaiqkt.auth.domain.models.enums.VerificationType
 import com.kaiqkt.auth.domain.utils.AuthenticationProperties
-import com.kaiqkt.auth.domain.utils.TokenUtils
+import com.kaiqkt.kt.tools.security.utils.TokenUtils
 import jakarta.transaction.Transactional
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,7 @@
 package com.kaiqkt.auth.unit.application.web.security
 
-import com.kaiqkt.auth.domain.utils.TokenUtils
 import com.kaiqkt.kt.tools.security.dtos.Authentication
+import com.kaiqkt.kt.tools.security.utils.TokenUtils
 
 object ContextSampler {
 
