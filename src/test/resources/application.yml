@@ -36,9 +36,9 @@ spring:
 
 service-url: http://localhost:8080
 
-springtools:
-  jwt-secret: world
-  access-token: world
+auth:
+  access-token-secret: world
+  api-key: world
   refresh-token-secret: world
   refresh-token-expiration: 7 # 7 days
-  jwt-token-expiration: 30  # 30 minutes
+  access-token-expiration: 30  # 30 minutes

@@ -4,10 +4,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-@ConfigurationProperties(prefix = "springtools")
+@ConfigurationProperties(prefix = "auth")
 data class AuthenticationProperties(
-    var jwtSecret: String = "",
+    var accessTokenSecret: String = "",
     var refreshTokenSecret: String = "",
     var refreshTokenExpiration: Long = 0,
-    var jwtTokenExpiration: Long = 0
+    var accessTokenExpiration: Long = 0
 )

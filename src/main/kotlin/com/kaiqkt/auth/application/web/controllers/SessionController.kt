@@ -1,6 +1,5 @@
 package com.kaiqkt.auth.application.web.controllers
 
-import com.kaiqkt.springtools.security.utils.Context
 import com.kaiqkt.auth.application.web.responses.toV1
 import com.kaiqkt.auth.domain.models.Session
 import com.kaiqkt.auth.domain.services.SessionService
@@ -9,6 +8,7 @@ import com.kaiqkt.auth.generated.application.web.controllers.SessionApi
 import com.kaiqkt.auth.generated.application.web.controllers.SessionsApi
 import com.kaiqkt.auth.generated.application.web.dtos.IdsRequestV1
 import com.kaiqkt.auth.generated.application.web.dtos.PageResponseV1
+import com.kaiqkt.kt.tools.security.utils.ContextUtils
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.http.ResponseEntity
@@ -26,9 +26,9 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
         orderBy: String,
         id: String?
     ): ResponseEntity<PageResponseV1> {
-        val roles = Context.getValue(Constants.ROLES, List::class.java)
+        val roles = ContextUtils.getValue(Constants.ROLES, List::class.java)
         val searchId =
-            if (roles.contains(Constants.ROLE_ADMIN)) id else Context.getValue(Constants.USER_ID, String::class.java)
+            if (roles.contains(Constants.ROLE_ADMIN)) id else ContextUtils.getValue(Constants.USER_ID, String::class.java)
 
         val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(sort), orderBy))
         val response = sessionService.search(searchId, pageRequest)
@@ -38,7 +38,7 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
 
     @PreAuthorize("hasRole('ROLE_USER')")
     override fun revoke(sessionId: String): ResponseEntity<Unit> {
-        val userId = Context.getValue(Constants.USER_ID, String::class.java)
+        val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)
         sessionService.revokeById(sessionId, userId)
 
         return ResponseEntity.ok().build()
@@ -46,8 +46,8 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
 
     @PreAuthorize("hasRole('ROLE_USER')")
     override fun revokeCurrent(): ResponseEntity<Unit> {
-        val userId = Context.getValue(Constants.USER_ID, String::class.java)
-        val sessionId = Context.getValue(Constants.SESSION_ID, String::class.java)
+        val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)
+        val sessionId = ContextUtils.getValue(Constants.SESSION_ID, String::class.java)
         sessionService.revokeById(sessionId, userId)
 
         return ResponseEntity.ok().build()
@@ -55,7 +55,7 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
 
     @PreAuthorize("hasRole('ROLE_USER')")
     override fun revokeAll(): ResponseEntity<Unit> {
-        val userId = Context.getValue(Constants.USER_ID, String::class.java)
+        val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)
         sessionService.revokeAllByUserId(userId)
 
         return ResponseEntity.ok().build()

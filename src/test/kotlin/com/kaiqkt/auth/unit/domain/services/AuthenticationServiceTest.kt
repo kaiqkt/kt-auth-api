@@ -26,10 +26,10 @@ class AuthenticationServiceTest {
     private val userService: UserService = mockk()
     private val sessionService: SessionService = mockk()
     private val properties: AuthenticationProperties = AuthenticationProperties(
-        jwtSecret = "secret",
+        accessTokenSecret = "secret",
         refreshTokenSecret = "secret",
         refreshTokenExpiration = 1,
-        jwtTokenExpiration = 1
+        accessTokenExpiration = 1
     )
     private val verificationService: VerificationService = mockk()
     private val authenticationService =

@@ -1,6 +1,5 @@
 package com.kaiqkt.auth.application.web.controllers
 
-import com.kaiqkt.springtools.security.utils.Context
 import com.kaiqkt.auth.application.web.requests.toDomain
 import com.kaiqkt.auth.application.web.responses.toV1
 import com.kaiqkt.auth.domain.models.User
@@ -15,6 +14,7 @@ import com.kaiqkt.auth.generated.application.web.dtos.ResetPasswordRequestV1
 import com.kaiqkt.auth.generated.application.web.dtos.SendResetPasswordRequestV1
 import com.kaiqkt.auth.generated.application.web.dtos.UserRequestV1
 import com.kaiqkt.auth.generated.application.web.dtos.UserResponseV1
+import com.kaiqkt.kt.tools.security.utils.ContextUtils
 import org.apache.commons.text.StringSubstitutor
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -37,7 +37,7 @@ class UserController(private val userService: UserService) : UserApi, UsersApi {
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     override fun findCurrent(): ResponseEntity<UserResponseV1> {
-        val userId = Context.getValue(Constants.USER_ID, String::class.java)
+        val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)
         val response = userService.findById(userId)
 
         return ResponseEntity.ok(response.toV1())
@@ -86,7 +86,7 @@ class UserController(private val userService: UserService) : UserApi, UsersApi {
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     override fun updatePassword(passwordRequestV1: PasswordRequestV1): ResponseEntity<UserResponseV1> {
-        val userId = Context.getValue(Constants.USER_ID, String::class.java)
+        val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)
         userService.resetPassword(userId, passwordRequestV1.oldPassword, passwordRequestV1.newPassword)
         return ResponseEntity.ok().build()
     }

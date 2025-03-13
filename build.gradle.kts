@@ -1,7 +1,7 @@
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
-	id("org.springframework.boot") version "3.4.0"
+	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.6"
 	id("org.openapi.generator") version "7.9.0"
 	jacoco
@@ -47,8 +47,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
     // Custom Libraries
-    implementation("com.kaiqkt:springtools-security:1.0.21")
-    implementation("com.kaiqkt:springtools-healthcheck:1.0.0")
+    implementation("com.kaiqkt:kt-tools-healthcheck:1.0.0")
+    implementation("com.kaiqkt:kt-tools-security:1.0.0")
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

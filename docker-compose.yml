@@ -38,11 +38,11 @@ services:
       MAIL_AUTH_ENABLED: false
       MAIL_STARTTLS_ENABLED: false
       SERVICE_URL: http://localhost:8080
-      JWT_SECRET: world
-      ACCESS_TOKEN: world
+      ACCESS_TOKEN_SECRET: world
+      API_KEY: world
       REFRESH_TOKEN_SECRET: world
     ports:
-      - "8080:8080"
+      - "8081:8080"
 
 volumes:
   postgres:

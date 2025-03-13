@@ -97,8 +97,8 @@ class IntegrationTest {
 
         val accessToken = TokenUtils.generateJwt(
             mapOf("user_id" to session.user.id, "session_id" to session.id, "roles" to user.roles.map { it.name }),
-            authenticationProperties.jwtTokenExpiration,
-            authenticationProperties.jwtSecret
+            authenticationProperties.accessTokenExpiration,
+            authenticationProperties.accessTokenSecret
         )
 
         return Pair(accessToken, refreshToken)

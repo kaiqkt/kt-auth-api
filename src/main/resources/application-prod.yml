@@ -31,9 +31,9 @@ spring:
 
 service-url: ${SERVICE_URL}
 
-springtools:
-  jwt-secret: ${JWT_SECRET}
-  access-token: ${ACCESS_TOKEN}
+auth:
+  access-token-secret: ${ACCESS_TOKEN_SECRET}
+  api-key: ${API-KEY}
   refresh-token-secret: ${REFRESH_TOKEN_SECRET}
   refresh-token-expiration: 7 # 7 days
-  jwt-token-expiration: 30  # 30 minutes
+  access-token-expiration: 30  # 30 minutes
