@@ -11,7 +11,6 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Import
 
 @SpringBootApplication(exclude = [UserDetailsServiceAutoConfiguration::class])
-@ComponentScan(basePackages = ["com.kaiqkt"])
 @Import(SecurityConfig::class, HealthCheckConfig::class)
 @EnableConfigurationProperties(AuthenticationProperties::class)
 class Application

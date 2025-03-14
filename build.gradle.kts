@@ -48,7 +48,7 @@ dependencies {
 
     // Custom Libraries
     implementation("com.kaiqkt:kt-tools-healthcheck:1.0.0")
-    implementation("com.kaiqkt:kt-tools-security:1.0.0")
+    implementation("com.kaiqkt:kt-tools-security:1.0.6")
 
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
