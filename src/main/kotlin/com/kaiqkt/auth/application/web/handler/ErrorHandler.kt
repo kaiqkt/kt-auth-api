@@ -79,15 +79,6 @@ class ErrorHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
 
-    @ExceptionHandler(Exception::class)
-    fun handleGenericException(ex: Exception, request: WebRequest): ResponseEntity<ErrorV1> {
-        val error = ErrorV1(ErrorType.INTERNAL_SERVER_ERROR.name, ex.message ?: "Internal server error")
-
-        log(ex, request.getDescription(false))
-
-        return ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
-
     private fun log(ex: Exception, description: String) {
         val log = LoggerFactory.getLogger(ErrorHandler::class.java)
 

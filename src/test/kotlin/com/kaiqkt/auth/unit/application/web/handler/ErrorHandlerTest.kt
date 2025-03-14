@@ -89,17 +89,6 @@ class ErrorHandlerTest {
     }
 
     @Test
-    fun `given an exception when handling should return the message in the exception`() {
-        val exception = Exception("message")
-
-        val response = errorHandler.handleGenericException(exception, webRequest)
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
-        assertEquals(ErrorType.INTERNAL_SERVER_ERROR.name, response.body?.type)
-        assertEquals("message", response.body?.message)
-    }
-
-    @Test
     fun `given an constraint violation exception should return the constraint violations`(){
         val constraintViolationException = mockk<ConstraintViolationException>()
         val constraintViolation = mockk<ConstraintViolation<*>>()
@@ -115,16 +104,5 @@ class ErrorHandlerTest {
         assertEquals(ErrorType.INVALID_ARGUMENTS.name, response.body?.type)
         assertEquals("Invalid arguments", response.body?.message)
         assertEquals("message", response.body?.errors?.get("field"))
-    }
-
-    @Test
-    fun `given an exception without message when handling should return the message in the exception`() {
-        val exception = Exception()
-
-        val response = errorHandler.handleGenericException(exception, webRequest)
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.statusCode)
-        assertEquals(ErrorType.INTERNAL_SERVER_ERROR.name, response.body?.type)
-        assertEquals("Internal server error", response.body?.message)
     }
 }
