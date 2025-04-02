@@ -41,7 +41,7 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
         val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)
         sessionService.revokeById(sessionId, userId)
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -50,7 +50,7 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
         val sessionId = ContextUtils.getValue(Constants.SESSION_ID, String::class.java)
         sessionService.revokeById(sessionId, userId)
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -58,13 +58,13 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
         val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)
         sessionService.revokeAllByUserId(userId)
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     override fun revokeAllByIds(idsRequestV1: IdsRequestV1): ResponseEntity<Unit> {
         sessionService.revokeAllByIds(idsRequestV1.ids)
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 }

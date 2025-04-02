@@ -42,9 +42,9 @@
 - [x] Insert default role user
 - [x] Improve performance for login for when need to send the verify email ASYNC
 - [x] Improve verification service to a control better the send of a email(auth-registry/communication-service)
-- [ ] Create and push to the git repository
-- [ ] Reset password screen to pass the new password
+- [x] Create and push to the git repository
+- [x] Reset password screen to pass the new password
 
 ## Documentation
 - [X] Document API endpoints
-- [ ] Write a guide for deploying the application
+- [x] Write a guide for deploying the application

@@ -94,7 +94,7 @@ class UserController(private val userService: UserService) : UserApi, UsersApi {
     override fun resetPasswordRequest(sendResetPasswordRequestV1: SendResetPasswordRequestV1): ResponseEntity<Unit> {
         userService.resetPasswordRequest(sendResetPasswordRequestV1.email)
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     override fun resetPassword(
@@ -103,7 +103,7 @@ class UserController(private val userService: UserService) : UserApi, UsersApi {
     ): ResponseEntity<Unit> {
         userService.resetPassword(code, resetPasswordRequestV1.newPassword)
 
-        return ResponseEntity.ok().build()
+        return ResponseEntity.noContent().build()
     }
 
     override fun verifyEmail(code: String): ResponseEntity<String> {

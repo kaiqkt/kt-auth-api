@@ -21,7 +21,7 @@ class SessionIntegrationTest : IntegrationTest() {
             .header("Authorization", "Bearer ${authentication.first}")
             .patch("/session/${session.id}/revoke")
             .then()
-            .statusCode(200)
+            .statusCode(204)
             .extract()
             .response()
 
@@ -36,7 +36,7 @@ class SessionIntegrationTest : IntegrationTest() {
             .header("Authorization", "Bearer ${authentication.first}")
             .patch("/session/revoke/current")
             .then()
-            .statusCode(200)
+            .statusCode(204)
             .extract()
             .response()
 
@@ -51,7 +51,7 @@ class SessionIntegrationTest : IntegrationTest() {
             .header("Authorization", "Bearer ${authentication.first}")
             .patch("/sessions/revoke")
             .then()
-            .statusCode(200)
+            .statusCode(204)
             .extract()
             .response()
 
@@ -70,7 +70,7 @@ class SessionIntegrationTest : IntegrationTest() {
             .body(request)
             .patch("/sessions/revoke/all")
             .then()
-            .statusCode(200)
+            .statusCode(204)
             .extract()
             .response()
 

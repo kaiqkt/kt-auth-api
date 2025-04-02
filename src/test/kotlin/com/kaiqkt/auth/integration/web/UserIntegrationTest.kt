@@ -584,7 +584,7 @@ class UserIntegrationTest : IntegrationTest() {
             .body(mapper.writeValueAsString(request))
             .post("/user/reset-password")
             .then()
-            .statusCode(200)
+            .statusCode(204)
 
         assertTrue { SpringMailMock.verify() }
     }
@@ -620,7 +620,7 @@ class UserIntegrationTest : IntegrationTest() {
             .body(mapper.writeValueAsString(request))
             .post("/user/${verification.code}/reset-password")
             .then()
-            .statusCode(200)
+            .statusCode(204)
 
 
         assertEquals(0, sessionRepository.count())

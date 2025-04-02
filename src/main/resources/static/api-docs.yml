@@ -94,7 +94,7 @@ paths:
             schema:
               $ref: '#/components/schemas/DeleteRolesRequestV1'
       responses:
-        200:
+        204:
           description: Roles deleted
     get:
       tags:
@@ -317,7 +317,7 @@ paths:
           schema:
             type: string
       responses:
-        200:
+        204:
           description: Session revoked
         400:
           description: Invalid payload
@@ -351,7 +351,7 @@ paths:
       security:
         - JwtToken: [ ]
       responses:
-        200:
+        204:
           description: Sessions revoked
         400:
           description: Invalid payload
@@ -374,7 +374,7 @@ paths:
             schema:
               $ref: '#/components/schemas/IdsRequestV1'
       responses:
-        200:
+        204:
           description: Sessions revoked
         400:
           description: Invalid payload
@@ -666,7 +666,7 @@ paths:
             schema:
               $ref: '#/components/schemas/SendResetPasswordRequestV1'
       responses:
-        200:
+        204:
           description: Reset password request sent successfully
         404:
           description: User not found
@@ -694,7 +694,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ResetPasswordRequestV1'
       responses:
-        200:
+        204:
           description: Password update successfully
   /user/{code}/reset-password-form:
     get:
