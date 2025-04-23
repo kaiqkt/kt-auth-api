@@ -236,12 +236,8 @@ paths:
       security:
         - JwtToken: [ ]
       responses:
-        200:
+        204:
           description: Session verified
-          content:
-            application/vnd.kaiqkt_auth_api_auth_verify_v1+json:
-              schema:
-                $ref: '#/components/schemas/VerifiedSessionResponseV1'
         400:
           description: Invalid payload
           content:

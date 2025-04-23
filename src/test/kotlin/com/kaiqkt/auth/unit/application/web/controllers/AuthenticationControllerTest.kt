@@ -50,8 +50,7 @@ class AuthenticationControllerTest {
 
         val response = authenticationController.verify()
 
-        assertEquals(response.statusCode, HttpStatus.OK)
-        assertEquals(response.body?.isValid, true)
+        assertEquals(response.statusCode, HttpStatus.NO_CONTENT)
     }
 
     @Test
@@ -61,7 +60,6 @@ class AuthenticationControllerTest {
 
         val response = authenticationController.verify()
 
-        assertEquals(response.statusCode, HttpStatus.OK)
-        assertEquals(response.body?.isValid, false)
+        assertEquals(response.statusCode, HttpStatus.FORBIDDEN)
     }
 }

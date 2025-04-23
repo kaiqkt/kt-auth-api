@@ -163,7 +163,7 @@ class UserControllerTest {
 
         verify { userService.resetPasswordRequest(request.email) }
 
-        assertEquals(response.statusCode, HttpStatus.OK)
+        assertEquals(response.statusCode, HttpStatus.NO_CONTENT)
     }
 
     @Test
@@ -177,7 +177,7 @@ class UserControllerTest {
 
         verify { userService.resetPassword(code, request.newPassword) }
 
-        assertEquals(response.statusCode, HttpStatus.OK)
+        assertEquals(response.statusCode, HttpStatus.NO_CONTENT)
     }
 
     @Test

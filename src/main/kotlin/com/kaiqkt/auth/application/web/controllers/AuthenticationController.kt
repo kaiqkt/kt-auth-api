@@ -9,6 +9,7 @@ import com.kaiqkt.auth.generated.application.web.dtos.AuthenticationResponseV1
 import com.kaiqkt.auth.generated.application.web.dtos.LoginRequestV1
 import com.kaiqkt.auth.generated.application.web.dtos.VerifiedSessionResponseV1
 import com.kaiqkt.kt.tools.security.utils.ContextUtils
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.RestController
@@ -51,10 +52,13 @@ class AuthenticationController(
     }
 
     @PreAuthorize("hasRole('ROLE_USER')")
-    override fun verify(): ResponseEntity<VerifiedSessionResponseV1> {
+    override fun verify(): ResponseEntity<Unit> {
         val sessionId = ContextUtils.getValue(Constants.SESSION_ID, String::class.java)
-        val isVerified = authenticationService.verify(sessionId)
 
-        return ResponseEntity.ok(VerifiedSessionResponseV1(isVerified))
+        if (authenticationService.verify(sessionId))  {
+            return ResponseEntity.noContent().build()
+        }
+
+        return ResponseEntity(HttpStatus.FORBIDDEN)
     }
 }

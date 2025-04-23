@@ -159,17 +159,12 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
     @Test
     fun `given a session id when the session is found should return http status 200`() {
-
-        val response = given()
+        given()
             .header("Authorization", "Bearer ${mockAuthentication().first}")
             .post("/verify")
             .then()
-            .statusCode(200)
+            .statusCode(204)
             .extract()
             .response()
-
-        val verified = mapper.readValue(response.body.asString(), VerifiedSessionResponseV1::class.java)
-
-        assertTrue(verified.isValid)
     }
 }

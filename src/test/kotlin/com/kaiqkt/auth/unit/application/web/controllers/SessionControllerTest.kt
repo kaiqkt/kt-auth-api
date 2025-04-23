@@ -33,7 +33,7 @@ class SessionControllerTest {
 
         verify { sessionService.revokeById("sessionId", "userId") }
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
     }
 
     @Test
@@ -44,7 +44,7 @@ class SessionControllerTest {
 
         verify { sessionService.revokeById("sessionId", "userId") }
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
     }
 
     @Test
@@ -55,7 +55,7 @@ class SessionControllerTest {
 
         verify { sessionService.revokeAllByUserId("userId") }
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
     }
 
     @Test
@@ -66,7 +66,7 @@ class SessionControllerTest {
 
         verify { sessionService.revokeAllByIds(listOf("sessionId")) }
 
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
     }
 
     @Test
