@@ -10,7 +10,6 @@ info:
     name: Apache-2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
 
-
 paths:
   /role:
     post:
@@ -466,7 +465,7 @@ paths:
             application/vnd.kaiqkt_auth_api_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
-    delete:
+    patch:
       tags:
         - user
       description: Remove roles of a user

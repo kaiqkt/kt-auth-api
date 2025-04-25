@@ -1,0 +1,36 @@
+---
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres-kt-auth:5432/kt_auth_api
+    username: auth_api
+    password: mypwd
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    placeholders:
+      ADMIN_EMAIL: "admin@kt.com"
+      ADMIN_PASSWORD: "$2a$10$wrsD3FKU6Fo8Vy1VBui51O29uSTeHpmYJChaK6bT4CULrx8d9H.tG" # @Admin1234#
+    placeholder-replacement: true
+  mail:
+    default-encoding: UTF-8
+    host: mailhog
+    username: "admin@kt.com"
+    password: ""
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+    protocol: smtp
+    test-connection: false
+
+service-url: "http://localhost:8080"
+
+auth:
+  access-token-secret: world
+  api-key: world
+  refresh-token-secret: world
+  refresh-token-expiration: 7 # 7 days
+  access-token-expiration: 30  # 30 minutes

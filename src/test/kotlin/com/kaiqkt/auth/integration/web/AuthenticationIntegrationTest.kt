@@ -167,4 +167,22 @@ class AuthenticationIntegrationTest : IntegrationTest() {
             .extract()
             .response()
     }
+
+    @Test
+    fun `given a session id when the session is not valid should return http status 401`() {
+        val authentication = mockAuthentication().first
+        sessionRepository.deleteAll()
+
+       val response =  given()
+            .header("Authorization", "Bearer $authentication")
+            .post("/verify")
+            .then()
+            .statusCode(401)
+            .extract()
+            .response()
+
+        val error = mapper.readValue(response.body.asString(), ErrorV1::class.java)
+
+        assertEquals(ErrorType.INVALID_SESSION.name, error.type)
+    }
 }

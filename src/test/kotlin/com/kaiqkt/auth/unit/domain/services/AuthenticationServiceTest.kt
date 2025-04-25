@@ -19,8 +19,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class AuthenticationServiceTest {
     private val userService: UserService = mockk()
@@ -127,16 +125,14 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    fun `given a access token when the session is not found should return false`() {
+    fun `given a access token when the session is not found should return false and throw DomainException`() {
         val sessionId = ULID.random()
 
         every { sessionService.existsValidById(any()) } returns false
 
-        val result = authenticationService.verify(sessionId)
+        assertThrows<DomainException> { authenticationService.verify(sessionId) }
 
         verify { sessionService.existsValidById(any()) }
-
-        assertFalse { result }
     }
 
     @Test
@@ -145,11 +141,9 @@ class AuthenticationServiceTest {
 
         every { sessionService.existsValidById(any()) } returns true
 
-        val result = authenticationService.verify(sessionId)
+        authenticationService.verify(sessionId)
 
         verify { sessionService.existsValidById(any()) }
-
-        assertTrue { result }
     }
 
 }

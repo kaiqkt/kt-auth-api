@@ -1,13 +1,18 @@
 package com.kaiqkt.auth.unit.application.web.controllers
 
 import com.kaiqkt.auth.application.web.controllers.AuthenticationController
+import com.kaiqkt.auth.domain.exceptions.DomainException
+import com.kaiqkt.auth.domain.exceptions.ErrorType
 import com.kaiqkt.auth.domain.services.AuthenticationService
 import com.kaiqkt.auth.generated.application.web.dtos.LoginRequestV1
 import com.kaiqkt.auth.unit.application.web.security.ContextSampler
 import com.kaiqkt.auth.unit.domain.dtos.AuthenticationSampler
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.assertThrows
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import kotlin.test.Test
@@ -46,7 +51,7 @@ class AuthenticationControllerTest {
     @Test
     fun `given a verify request when verify and the session is valid should return is_valid true`() {
 
-        every { authenticationService.verify(any()) } returns true
+        justRun { authenticationService.verify(any()) }
 
         val response = authenticationController.verify()
 
@@ -56,10 +61,12 @@ class AuthenticationControllerTest {
     @Test
     fun `given a verify request when verify and the session is not valid should return is_valid false`() {
 
-        every { authenticationService.verify(any()) } returns false
+        every { authenticationService.verify(any()) } throws DomainException(ErrorType.INVALID_SESSION)
 
-        val response = authenticationController.verify()
+        assertThrows<DomainException> {
+            authenticationController.verify()
+        }
 
-        assertEquals(response.statusCode, HttpStatus.FORBIDDEN)
+        verify { authenticationService.verify(any()) }
     }
 }

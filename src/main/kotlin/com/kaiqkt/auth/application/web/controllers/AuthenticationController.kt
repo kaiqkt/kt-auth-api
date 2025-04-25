@@ -54,11 +54,8 @@ class AuthenticationController(
     @PreAuthorize("hasRole('ROLE_USER')")
     override fun verify(): ResponseEntity<Unit> {
         val sessionId = ContextUtils.getValue(Constants.SESSION_ID, String::class.java)
+        authenticationService.verify(sessionId)
 
-        if (authenticationService.verify(sessionId))  {
-            return ResponseEntity.noContent().build()
-        }
-
-        return ResponseEntity(HttpStatus.FORBIDDEN)
+        return ResponseEntity.noContent().build()
     }
 }

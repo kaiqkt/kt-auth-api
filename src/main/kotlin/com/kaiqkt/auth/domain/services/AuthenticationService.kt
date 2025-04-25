@@ -67,8 +67,10 @@ class AuthenticationService(
         }
     }
 
-    fun verify(sessionId: String): Boolean {
-        return sessionService.existsValidById(sessionId)
+    fun verify(sessionId: String) {
+        if(!sessionService.existsValidById(sessionId)) {
+            throw DomainException(ErrorType.INVALID_SESSION)
+        }
     }
 
     private fun generateAuthentication(session: Session): Pair<String, String> {
