@@ -2,7 +2,9 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY build/libs/*.jar app.jar
+COPY build/libs/*.jar ./
+
+RUN rm *-plain.jar && mv *.jar app.jar
 
 EXPOSE 8080
 

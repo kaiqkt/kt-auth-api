@@ -106,7 +106,7 @@ class UserIntegrationTest : IntegrationTest() {
     }
 
     @Test
-    fun `given a user request when the email is in use should return http status 400`() {
+    fun `given a user request when the email is in use should return http status 409`() {
         val request = UserRequestSampler.sample()
         val authentication = mockAuthentication()
 
@@ -118,7 +118,7 @@ class UserIntegrationTest : IntegrationTest() {
             .body(mapper.writeValueAsString(request))
             .post("/user")
             .then()
-            .statusCode(400)
+            .statusCode(409)
             .extract()
             .response()
 
