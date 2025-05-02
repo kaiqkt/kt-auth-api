@@ -9,6 +9,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
 import org.springframework.data.annotation.CreatedDate
@@ -35,6 +36,8 @@ data class User(
         inverseJoinColumns = [JoinColumn(name = "role_id")]
     )
     val roles: MutableList<Role> = mutableListOf(),
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val sessions: List<Session> = mutableListOf(),
     @CreatedDate
     val createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate

@@ -35,6 +35,13 @@ class UserController(private val userService: UserService) : UserApi, UsersApi {
         return ResponseEntity.ok(response.toV1())
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_API')")
+    override fun delete(userId: String): ResponseEntity<Unit> {
+        userService.delete(userId)
+
+        return ResponseEntity.noContent().build()
+    }
+
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     override fun findCurrent(): ResponseEntity<UserResponseV1> {
         val userId = ContextUtils.getValue(Constants.USER_ID, String::class.java)

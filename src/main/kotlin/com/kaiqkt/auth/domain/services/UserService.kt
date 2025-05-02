@@ -41,6 +41,13 @@ class UserService(
         }
     }
 
+    fun delete(userId: String) {
+        val user = findById(userId)
+        userRepository.delete(user)
+
+        log.info("User $userId deleted successfully")
+    }
+
     @Transactional
     fun verifyEmail(code: String): String {
         return runCatching {

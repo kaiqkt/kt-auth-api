@@ -27,6 +27,35 @@ import kotlin.test.assertTrue
 class UserIntegrationTest : IntegrationTest() {
 
     @Test
+    fun `given a delete request and a user id when the user is not found should return status 404`() {
+        val authentication = mockAuthentication()
+
+        val response = given()
+            .header("Authorization", "Bearer ${authentication.first}")
+            .delete("/user/test_user_id")
+            .then()
+            .statusCode(404)
+            .extract()
+            .response()
+
+        val error = mapper.readValue(response.body.asString(), ErrorV1::class.java)
+
+        assertEquals(error.type, ErrorType.USER_NOT_FOUND.name)
+    }
+
+    @Test
+    fun `given a delete request and a user id when the user is found should return status 204`() {
+        val authentication = mockAuthentication()
+        val user = userRepository.findAll().first()
+
+        given()
+            .header("Authorization", "Bearer ${authentication.first}")
+            .delete("/user/${user.id}")
+            .then()
+            .statusCode(204)
+    }
+
+    @Test
     fun `given a user request when the first name is empty should return status 400`() {
         val request = UserRequestSampler.sample().copy(firstName = "")
         val authentication = mockAuthentication()

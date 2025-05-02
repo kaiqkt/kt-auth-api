@@ -33,6 +33,19 @@ class UserControllerTest {
     }
 
     @Test
+    fun `given a user id when delete is called should return no content`() {
+        val userId = ULID.random()
+
+        justRun { userService.delete(any()) }
+
+        val response = userController.delete(userId)
+
+        verify { userService.delete(userId) }
+
+        assertEquals(response.statusCode, HttpStatus.NO_CONTENT)
+    }
+
+    @Test
     fun `given a user request when create is called should return a user response`() {
         val request = UserRequestSampler.sample()
 

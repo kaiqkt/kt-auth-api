@@ -44,6 +44,7 @@
 - [x] Improve verification service to a control better the send of a email(auth-registry/communication-service)
 - [x] Create and push to the git repository
 - [x] Reset password screen to pass the new password
+- [x] Implement delete account
 
 ## Documentation
 - [X] Document API endpoints

@@ -35,6 +35,34 @@ class UserServiceTest {
         UserService(roleService, userRepository, credentialRepository, sessionService, verificationService)
 
     @Test
+    fun `given a user id when exists should delete successfully`(){
+        val user = UserSampler.sample()
+
+        every { userRepository.findById(any()) } returns Optional.of(user)
+        justRun { userRepository.delete(any()) }
+
+        userService.delete("1")
+
+        verify { userRepository.findById("1") }
+        verify { userRepository.delete(user) }
+    }
+
+    @Test
+    fun `given a user id when not exists should throw a exception`(){
+        val user = UserSampler.sample()
+
+        every { userRepository.findById(any()) } returns Optional.empty()
+        justRun { userRepository.delete(any()) }
+
+        val exception = assertThrows<DomainException> { userService.delete("1") }
+
+        verify { userRepository.findById("1") }
+        verify(exactly = 0) { userRepository.delete(user) }
+
+        assertEquals(exception.type, ErrorType.USER_NOT_FOUND)
+    }
+
+    @Test
     fun `given a new user when the email is not in use should create successfully`() {
         val user = UserSampler.sample()
 
