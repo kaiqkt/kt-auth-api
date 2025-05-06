@@ -3,17 +3,21 @@ package com.kaiqkt.auth.integration.web
 import com.kaiqkt.auth.domain.exceptions.ErrorType
 import com.kaiqkt.auth.generated.application.web.dtos.AuthenticationResponseV1
 import com.kaiqkt.auth.generated.application.web.dtos.ErrorV1
+import com.kaiqkt.auth.generated.application.web.dtos.IntrospectRequestV1
+import com.kaiqkt.auth.generated.application.web.dtos.IntrospectResponseV1
 import com.kaiqkt.auth.generated.application.web.dtos.LoginRequestV1
 import com.kaiqkt.auth.generated.application.web.dtos.VerifiedSessionResponseV1
 import com.kaiqkt.auth.integration.IntegrationTest
 import com.kaiqkt.auth.integration.utils.SpringMailMock
 import com.kaiqkt.auth.unit.domain.models.SessionSampler
 import com.kaiqkt.auth.unit.domain.models.UserSampler
+import com.kaiqkt.kt.tools.security.utils.TokenUtils
 import io.restassured.RestAssured.given
 import org.awaitility.Awaitility.await
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 
@@ -25,6 +29,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
         val request = LoginRequestV1(email = user.email, password = "Password@123")
 
         val response = given()
+            .header("X-Forwarded-For", "127.0.0.1")
             .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
             .body(request)
             .post("/login")
@@ -47,6 +52,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         val response = given()
             .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
             .then()
@@ -71,6 +77,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         val response = given()
             .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
             .then()
@@ -89,6 +96,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         val response = given()
             .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
             .then()
@@ -108,6 +116,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         val response = given()
             .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
             .then()
@@ -125,6 +134,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
     fun `given a refresh token when the session is not found should return http status 401`() {
         val response = given()
             .header("X-Refresh-Token", "refreshToken")
+            .header("X-Forwarded-For", "127.0.0.1")
             .post("/refresh")
             .then()
             .statusCode(401)
@@ -144,6 +154,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         val response = given()
             .header("X-Refresh-Token", session.refreshToken)
+            .header("X-Forwarded-For", "127.0.0.1")
             .post("/refresh")
             .then()
             .statusCode(200)
@@ -158,31 +169,97 @@ class AuthenticationIntegrationTest : IntegrationTest() {
     }
 
     @Test
-    fun `given a session id when the session is found should return http status 200`() {
-        given()
-            .header("Authorization", "Bearer ${mockAuthentication().first}")
-            .post("/verify")
+    fun `given access token when the session is found and is not expired should return http status 200`() {
+        val authentication = mockAuthentication().first
+        val request = IntrospectRequestV1(authentication)
+
+        val response = given()
+            .header("Authorization", apiKey)
+            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .body(request)
+            .post("/introspect")
             .then()
-            .statusCode(204)
+            .statusCode(200)
             .extract()
             .response()
+
+        val introspect = mapper.readValue(response.body().asString(), IntrospectResponseV1::class.java)
+
+        assertTrue { introspect.active }
+    }
+
+
+    @Test
+    fun `given a access token when the session is found and is expired should return http status 200`() {
+        val authentication = mockAuthentication().first
+        val session = sessionRepository.findAll().first()
+        sessionRepository.save( session.copy(expireAt = session.expireAt.minusYears(3)))
+
+        val request = IntrospectRequestV1(authentication)
+        val response = given()
+            .header("Authorization", apiKey)
+            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .body(request)
+            .post("/introspect")
+            .then()
+            .statusCode(200)
+            .extract()
+            .response()
+
+        val introspect = mapper.readValue(response.body().asString(), IntrospectResponseV1::class.java)
+
+        assertFalse { introspect.active }
     }
 
     @Test
-    fun `given a session id when the session is not valid should return http status 401`() {
+    fun `given a access token when the session is not found should return http status 401`() {
         val authentication = mockAuthentication().first
         sessionRepository.deleteAll()
 
-       val response =  given()
-            .header("Authorization", "Bearer $authentication")
-            .post("/verify")
+        val request = IntrospectRequestV1(authentication)
+
+        given()
+            .header("Authorization", apiKey)
+            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .body(request)
+            .post("/introspect")
             .then()
             .statusCode(401)
-            .extract()
-            .response()
+    }
 
-        val error = mapper.readValue(response.body.asString(), ErrorV1::class.java)
+    @Test
+    fun `given a access token expired should return http status 401`() {
+        val accessToken = TokenUtils.generateJwt(
+            mapOf("string" to "string"),
+            -30L,
+            authenticationProperties.accessTokenSecret
+        )
+        val request = IntrospectRequestV1(accessToken)
 
-        assertEquals(ErrorType.INVALID_SESSION.name, error.type)
+        given()
+            .header("Authorization", apiKey)
+            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .body(request)
+            .post("/introspect")
+            .then()
+            .statusCode(401)
+    }
+
+    @Test
+    fun `given a access token invalid should return http status 401`() {
+        val accessToken = TokenUtils.generateJwt(
+            mapOf("string" to "string"),
+            -30L,
+            "a"
+        )
+        val request = IntrospectRequestV1(accessToken)
+
+        given()
+            .header("Authorization", apiKey)
+            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .body(request)
+            .post("/introspect")
+            .then()
+            .statusCode(401)
     }
 }

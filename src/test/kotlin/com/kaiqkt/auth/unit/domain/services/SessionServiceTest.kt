@@ -1,5 +1,7 @@
 package com.kaiqkt.auth.unit.domain.services
 
+import com.kaiqkt.auth.domain.exceptions.DomainException
+import com.kaiqkt.auth.domain.exceptions.ErrorType
 import com.kaiqkt.auth.domain.repositories.SessionRepository
 import com.kaiqkt.auth.domain.services.SessionService
 import com.kaiqkt.auth.unit.domain.models.SessionSampler
@@ -7,10 +9,13 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.assertThrows
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import java.util.*
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SessionServiceTest {
     private val sessionRepository: SessionRepository = mockk()
@@ -72,12 +77,44 @@ class SessionServiceTest {
 
     @Test
     fun `given an id and a pagination should search sessions successfully`() {
-        val pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "name")
+        val pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "expireAt")
 
         every { sessionRepository.findAllByIdOrUserId(any(), any()) } returns PageImpl(listOf(SessionSampler.sample()))
 
-        sessionService.search("id", pageRequest)
+        sessionService.findAll("id", pageRequest)
 
         verify { sessionRepository.findAllByIdOrUserId("id", any()) }
+    }
+
+    @Test
+    fun `given an id and a pagination when sort property should throw a DomainException`() {
+        val pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "name")
+
+        val exception = assertThrows<DomainException> {
+            sessionService.findAll("id", pageRequest)
+        }
+
+        assertEquals(exception.type, ErrorType.INVALID_SORT_PROPERTY)
+    }
+
+    @Test
+    fun `given a session id when exists should return successfully`() {
+        every { sessionRepository.findById(any()) } returns Optional.of(SessionSampler.sample())
+
+        sessionService.findById("id")
+
+        verify { sessionRepository.findById("id") }
+    }
+
+    @Test
+    fun `given a session id when not exists should throws a exception`() {
+        every { sessionRepository.findById(any()) } returns Optional.empty()
+
+        val exception = assertThrows<DomainException> {
+            sessionService.findById("id")
+        }
+
+        verify { sessionRepository.findById("id") }
+        assertEquals(exception.type, ErrorType.INVALID_SESSION)
     }
 }

@@ -1,10 +1,13 @@
 package com.kaiqkt.auth.domain.services
 
+import com.kaiqkt.auth.domain.dtos.Introspect
 import com.kaiqkt.auth.domain.exceptions.DomainException
 import com.kaiqkt.auth.domain.exceptions.ErrorType
 import com.kaiqkt.auth.domain.models.Session
 import com.kaiqkt.auth.domain.models.enums.VerificationType
 import com.kaiqkt.auth.domain.utils.AuthenticationProperties
+import com.kaiqkt.auth.domain.utils.Constants
+import com.kaiqkt.kt.tools.security.exception.AuthException
 import com.kaiqkt.kt.tools.security.utils.TokenUtils
 import jakarta.transaction.Transactional
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +17,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 @Service
 class AuthenticationService(
@@ -24,7 +28,7 @@ class AuthenticationService(
 ) {
     private val log = LoggerFactory.getLogger(this::class.java)
 
-    fun authenticate(email: String, password: String, ip: String?): Pair<String, String> {
+    fun authenticate(email: String, password: String, ip: String): Pair<String, String> {
         val user = userService.findByEmail(email)
 
         if (!BCrypt.checkpw(password, user.credential.hash)) {
@@ -50,7 +54,7 @@ class AuthenticationService(
     }
 
     @Transactional
-    fun refresh(refreshToken: String, ip: String?): Pair<String, String> {
+    fun refresh(refreshToken: String, ip: String): Pair<String, String> {
         var session = sessionService.findValidByRefreshToken(refreshToken)
             ?: throw DomainException(ErrorType.INVALID_SESSION)
 
@@ -67,10 +71,25 @@ class AuthenticationService(
         }
     }
 
-    fun verify(sessionId: String) {
-        if(!sessionService.existsValidById(sessionId)) {
-            throw DomainException(ErrorType.INVALID_SESSION)
+    fun introspect(accessToken: String): Introspect {
+        val sessionId = try {
+            TokenUtils.extractJwtClaims(
+                accessToken,
+                authenticationProperties.accessTokenSecret
+            )[Constants.SESSION_ID].toString()
+        } catch (e: AuthException) {
+            throw DomainException(ErrorType.INVALID_TOKEN)
         }
+
+        val session = sessionService.findById(sessionId)
+
+        return Introspect(
+            active = session.expireAt.isAfter(LocalDateTime.now()),
+            username = session.user.email,
+            exp = session.expireAt.toEpochSecond(ZoneOffset.UTC),
+            sub = session.user.id,
+            roles = session.user.roles.map { it.name }
+        )
     }
 
     private fun generateAuthentication(session: Session): Pair<String, String> {

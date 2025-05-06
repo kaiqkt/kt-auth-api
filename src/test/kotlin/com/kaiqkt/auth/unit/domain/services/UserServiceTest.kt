@@ -21,6 +21,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.assertThrows
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -193,13 +194,22 @@ class UserServiceTest {
 
     @Test
     fun `given a pagination should return all user by it`() {
-        val pageRequest = PageRequest.of(0, 10, org.springframework.data.domain.Sort.Direction.ASC, "name")
+        val pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "createdAt")
 
-        every { userRepository.findAllByQuery(null, any<PageRequest>()) } returns PageImpl(listOf(UserSampler.sample()))
+        every { userRepository.findAllByIdOrEmail(null, any<PageRequest>()) } returns PageImpl(listOf(UserSampler.sample()))
 
         userService.findAll(null, pageRequest)
 
-        verify { userRepository.findAllByQuery(null, any<PageRequest>()) }
+        verify { userRepository.findAllByIdOrEmail(null, any<PageRequest>()) }
+    }
+
+    @Test
+    fun `given a pagination when sort property is invalid should throw DomainException`() {
+        val pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "name")
+
+        val exception = assertThrows<DomainException> { userService.findAll(null, pageRequest) }
+
+        assertEquals(exception.type, ErrorType.INVALID_SORT_PROPERTY)
     }
 
     @Test

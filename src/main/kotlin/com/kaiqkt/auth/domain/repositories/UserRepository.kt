@@ -2,7 +2,7 @@ package com.kaiqkt.auth.domain.repositories
 
 import com.kaiqkt.auth.domain.models.User
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -24,5 +24,5 @@ interface UserRepository: JpaRepository<User, String> {
         "SELECT u FROM User u WHERE :query IS NULL OR " +
                 "u.id = :query OR LOWER(u.email) LIKE LOWER(CONCAT('%', :query, '%'))"
     )
-    fun findAllByQuery(query: String?, pageable: PageRequest): Page<User>
+    fun findAllByIdOrEmail(query: String?, pageable: Pageable): Page<User>
 }

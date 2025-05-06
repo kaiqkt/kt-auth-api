@@ -90,6 +90,16 @@ class RoleServiceTest {
     }
 
     @Test
+    fun `given pagination and a query when the sort property is invalid should throw DomainException`() {
+        val pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "id")
+
+        val exception = assertThrows<DomainException> { roleService.findAll("admin", pageRequest) }
+
+        assertEquals(exception.type, ErrorType.INVALID_SORT_PROPERTY)
+    }
+
+
+    @Test
     fun `given pagination and a query when exist roles should return the roles with the pagination`() {
         val roles = listOf(RoleSampler.sample())
         val pageRequest = PageRequest.of(0, 10, Sort.Direction.ASC, "name")

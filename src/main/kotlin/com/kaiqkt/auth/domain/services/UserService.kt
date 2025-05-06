@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.security.crypto.bcrypt.BCrypt
 import org.springframework.stereotype.Service
@@ -26,6 +27,10 @@ class UserService(
     private val verificationService: VerificationService
 ) {
     private val log = LoggerFactory.getLogger(this::class.java)
+
+    companion object {
+        val ALLOWED_SORT_COLUMNS = setOf("isVerified", "createdAt", "updatedAt")
+    }
 
     fun create(user: User): User {
         if (userRepository.existsByEmail(user.email)) {
@@ -125,5 +130,15 @@ class UserService(
         return userRepository.findByEmail(email) ?: throw DomainException(ErrorType.USER_NOT_FOUND)
     }
 
-    fun findAll(query: String?, pageRequest: PageRequest) = userRepository.findAllByQuery(query, pageRequest)
+    fun findAll(query: String?, pageRequest: PageRequest): Page<User> {
+        val invalidProperty = pageRequest.sort
+            .map { it.property }
+            .firstOrNull { it !in ALLOWED_SORT_COLUMNS }
+
+        if (invalidProperty != null) {
+            throw DomainException(ErrorType.INVALID_SORT_PROPERTY)
+        }
+
+        return userRepository.findAllByIdOrEmail(query, pageRequest)
+    }
 }

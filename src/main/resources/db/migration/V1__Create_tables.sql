@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS credentials (
 
 CREATE TABLE IF NOT EXISTS sessions (
     id VARCHAR(26) PRIMARY KEY,
-    ip VARCHAR(255),
+    ip VARCHAR(255) NOT NULL,
     refresh_token VARCHAR(255) NOT NULL,
     user_id VARCHAR(26) NOT NULL,
     created_at TIMESTAMP NOT NULL,

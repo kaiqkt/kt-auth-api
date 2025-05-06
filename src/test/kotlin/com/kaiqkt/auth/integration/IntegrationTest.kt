@@ -24,6 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.security.Key
 import java.time.LocalDateTime
 
 @ActiveProfiles("profile")
@@ -33,6 +34,9 @@ import java.time.LocalDateTime
 class IntegrationTest {
     @LocalServerPort
     var port: Int = 0
+
+    @Value("\${auth.api-key}")
+    lateinit var apiKey: String
 
     @Value("\${spring.mail.password}")
     lateinit var smtpPassword: String

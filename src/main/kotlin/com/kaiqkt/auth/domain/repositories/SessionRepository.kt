@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
-interface SessionRepository: JpaRepository<Session, Long> {
+interface SessionRepository: JpaRepository<Session, String> {
     @Query("SELECT s FROM Session s " +
             "WHERE s.refreshToken = :refreshToken AND " +
             "s.expireAt > CURRENT_TIMESTAMP AND s.revokedAt IS NULL")

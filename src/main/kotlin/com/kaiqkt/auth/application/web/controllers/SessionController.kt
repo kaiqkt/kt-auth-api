@@ -31,7 +31,7 @@ class SessionController(private val sessionService: SessionService) : SessionsAp
             if (roles.contains(Constants.ROLE_ADMIN)) id else ContextUtils.getValue(Constants.USER_ID, String::class.java)
 
         val pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(sort), orderBy))
-        val response = sessionService.search(searchId, pageRequest)
+        val response = sessionService.findAll(searchId, pageRequest)
 
         return ResponseEntity.ok(response.toV1(Session::toV1))
     }

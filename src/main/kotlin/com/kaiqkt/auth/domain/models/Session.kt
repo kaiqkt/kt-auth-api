@@ -19,7 +19,7 @@ data class Session(
     @Id
     val id: String = ULID.random(),
     val refreshToken: String = "",
-    val ip: String? = null,
+    val ip: String = "",
     @ManyToOne
     @JoinColumn(name = "user_id")
     val user: User = User(),

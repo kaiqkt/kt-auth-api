@@ -10,15 +10,22 @@ import com.kaiqkt.auth.domain.services.VerificationService
 import com.kaiqkt.auth.domain.utils.AuthenticationProperties
 import com.kaiqkt.auth.unit.domain.models.SessionSampler
 import com.kaiqkt.auth.unit.domain.models.UserSampler
+import com.kaiqkt.kt.tools.security.exception.AuthException
+import com.kaiqkt.kt.tools.security.utils.TokenUtils
 import io.azam.ulidj.ULID
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
+import io.restassured.RestAssured.sessionId
 import kotlinx.coroutines.runBlocking
+import org.h2.schema.Domain
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class AuthenticationServiceTest {
     private val userService: UserService = mockk()
@@ -104,7 +111,7 @@ class AuthenticationServiceTest {
         every { sessionService.findValidByRefreshToken(any()) } returns null
 
         val exception = assertThrows<DomainException> {
-            authenticationService.refresh("refreshToken", null)
+            authenticationService.refresh("refreshToken", "127.0.0.1")
         }
 
         verify { sessionService.findValidByRefreshToken("refreshToken") }
@@ -125,25 +132,51 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    fun `given a access token when the session is not found should return false and throw DomainException`() {
-        val sessionId = ULID.random()
+    fun `given a access token when the token is expired should throw a DomainException`() {
+        val accessToken = TokenUtils.generateJwt(
+            mapOf("session_id" to ULID.random()),
+            -7,
+            properties.accessTokenSecret
+        )
 
-        every { sessionService.existsValidById(any()) } returns false
+        val exception = assertThrows<DomainException> { authenticationService.introspect(accessToken) }
 
-        assertThrows<DomainException> { authenticationService.verify(sessionId) }
+        assertEquals(exception.type, ErrorType.INVALID_TOKEN)
+    }
 
-        verify { sessionService.existsValidById(any()) }
+
+    @Test
+    fun `given a valid access token when exist a session id and is not expired for him should return a session introspection successfully with active true`(){
+        val accessToken = TokenUtils.generateJwt(
+            mapOf("session_id" to ULID.random()),
+            properties.accessTokenExpiration,
+            properties.accessTokenSecret
+        )
+
+        every { sessionService.findById(any()) } returns SessionSampler.sample()
+
+        val introspection = authenticationService.introspect(accessToken)
+
+        verify { sessionService.findById(any()) }
+
+        assertTrue { introspection.active }
     }
 
     @Test
-    fun `given a access token when the session is found should return true`() {
-        val sessionId = ULID.random()
+    fun `given a valid access token when exist a session id and is expired for him should return a session introspection successfully with active false`(){
+        val accessToken = TokenUtils.generateJwt(
+            mapOf("session_id" to ULID.random()),
+            properties.accessTokenExpiration,
+            properties.accessTokenSecret
+        )
+        val session = SessionSampler.sample().copy(expireAt = LocalDateTime.now().minusDays(1))
 
-        every { sessionService.existsValidById(any()) } returns true
+        every { sessionService.findById(any()) } returns session
 
-        authenticationService.verify(sessionId)
+        val introspection = authenticationService.introspect(accessToken)
 
-        verify { sessionService.existsValidById(any()) }
+        verify { sessionService.findById(any()) }
+
+        assertFalse { introspection.active }
     }
-
 }

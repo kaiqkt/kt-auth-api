@@ -74,11 +74,11 @@ class SessionControllerTest {
         val sessions = listOf(SessionSampler.sample())
         val page = PageImpl(sessions)
 
-        every { sessionService.search(any(), any()) } returns page
+        every { sessionService.findAll(any(), any()) } returns page
 
         val response = controller.getAll(0, 10, "ASC", "createdBy", "userId")
 
-        verify { sessionService.search("userId", any()) }
+        verify { sessionService.findAll("userId", any()) }
 
         assertEquals(response.statusCode, HttpStatus.OK)
     }
@@ -92,11 +92,11 @@ class SessionControllerTest {
         val sessions = listOf(SessionSampler.sample())
         val page = PageImpl(sessions)
 
-        every { sessionService.search(any(), any()) } returns page
+        every { sessionService.findAll(any(), any()) } returns page
 
         val response = controller.getAll(0, 10, "ASC", "createdBy", "userId")
 
-        verify { sessionService.search("userId", any()) }
+        verify { sessionService.findAll("userId", any()) }
 
         assertEquals(response.statusCode, HttpStatus.OK)
     }

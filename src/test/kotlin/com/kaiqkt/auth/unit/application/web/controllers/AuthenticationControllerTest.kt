@@ -1,18 +1,15 @@
 package com.kaiqkt.auth.unit.application.web.controllers
 
 import com.kaiqkt.auth.application.web.controllers.AuthenticationController
-import com.kaiqkt.auth.domain.exceptions.DomainException
-import com.kaiqkt.auth.domain.exceptions.ErrorType
 import com.kaiqkt.auth.domain.services.AuthenticationService
 import com.kaiqkt.auth.generated.application.web.dtos.LoginRequestV1
+import com.kaiqkt.auth.unit.application.web.request.IntrospectRequestSampler
 import com.kaiqkt.auth.unit.application.web.security.ContextSampler
 import com.kaiqkt.auth.unit.domain.dtos.AuthenticationSampler
+import com.kaiqkt.auth.unit.domain.dtos.IntrospectSampler
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.assertThrows
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import kotlin.test.Test
@@ -34,7 +31,7 @@ class AuthenticationControllerTest {
 
         every { authenticationService.authenticate(any(), any(), any()) } returns AuthenticationSampler.sample()
 
-        val response = authenticationController.login(request, "192.0.0.1")
+        val response = authenticationController.login( "192.0.0.1", request)
 
         assertEquals(response.statusCode, HttpStatus.OK)
     }
@@ -49,24 +46,12 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    fun `given a verify request when verify and the session is valid should return is_valid true`() {
+    fun `given a introspect request when session is valid should return successfully`() {
 
-        justRun { authenticationService.verify(any()) }
+        every { authenticationService.introspect(any()) } returns IntrospectSampler.sample()
 
-        val response = authenticationController.verify()
+        val response = authenticationController.introspect(IntrospectRequestSampler.sample())
 
-        assertEquals(response.statusCode, HttpStatus.NO_CONTENT)
-    }
-
-    @Test
-    fun `given a verify request when verify and the session is not valid should return is_valid false`() {
-
-        every { authenticationService.verify(any()) } throws DomainException(ErrorType.INVALID_SESSION)
-
-        assertThrows<DomainException> {
-            authenticationController.verify()
-        }
-
-        verify { authenticationService.verify(any()) }
+        assertEquals(response.statusCode, HttpStatus.OK)
     }
 }
