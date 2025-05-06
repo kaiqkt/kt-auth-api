@@ -17,7 +17,7 @@ class SessionService(
     private val log = LoggerFactory.getLogger(this::class.java)
 
     companion object {
-        val ALLOWED_SORT_COLUMNS = setOf("expireAt", "createdAt", "updatedAt", "expireAt", "revokedAt")
+        val ALLOWED_SORT_COLUMNS = setOf("expireAt", "createdAt", "updatedAt", "revokedAt")
     }
 
     fun save(session: Session): Session {
