@@ -22,7 +22,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .body(request)
             .header("Authorization", "Bearer ${authentication.first}")
             .post("/role")
@@ -42,7 +42,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .body(request)
             .header("Authorization", "Bearer ${authentication.first}")
             .post("/role")
@@ -63,7 +63,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .body(request)
             .header("Authorization", "Bearer ${authentication.first}")
             .post("/role")
@@ -84,7 +84,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .body(request)
             .header("Authorization", "Bearer ${authentication.first}")
             .post("/role")
@@ -106,7 +106,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .patch("/role/${role.id}")
@@ -128,7 +128,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .patch("/role/${role.id}")
@@ -150,7 +150,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .patch("/role/${role.id}")
@@ -172,7 +172,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .patch("/role/test_role")
@@ -195,7 +195,7 @@ class RoleIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         given()
-            .contentType("application/vnd.kaiqkt_auth_api_role_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_role_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .delete("/roles")

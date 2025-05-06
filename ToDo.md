@@ -45,7 +45,6 @@
 - [x] Create and push to the git repository
 - [x] Reset password screen to pass the new password
 - [x] Implement delete account
-- [ ] Add detekt and klint
 
 ## Documentation
 - [X] Document API endpoints

@@ -30,7 +30,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         val response = given()
             .header("X-Forwarded-For", "127.0.0.1")
-            .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_login_v1+json")
             .body(request)
             .post("/login")
             .then()
@@ -51,7 +51,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
         val request = LoginRequestV1(email = user.email, password = "Password@123")
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_login_v1+json")
             .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
@@ -76,7 +76,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
         val request = LoginRequestV1(email = user.email, password = "Password@12")
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_login_v1+json")
             .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
@@ -95,7 +95,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
         val request = LoginRequestV1(email = "", password = "password")
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_login_v1+json")
             .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
@@ -115,7 +115,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
         val request = LoginRequestV1(email = "email@email", password = "")
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_login_v1+json")
             .header("X-Forwarded-For", "127.0.0.1")
             .body(request)
             .post("/login")
@@ -133,6 +133,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
     @Test
     fun `given a refresh token when the session is not found should return http status 401`() {
         val response = given()
+            .contentType("application/vnd.kaiqkt_auth_refresh_v1+json")
             .header("X-Refresh-Token", "refreshToken")
             .header("X-Forwarded-For", "127.0.0.1")
             .post("/refresh")
@@ -153,6 +154,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
         val session = sessionRepository.save(SessionSampler.sample().copy(user = user))
 
         val response = given()
+            .contentType("application/vnd.kaiqkt_auth_refresh_v1+json")
             .header("X-Refresh-Token", session.refreshToken)
             .header("X-Forwarded-For", "127.0.0.1")
             .post("/refresh")
@@ -175,7 +177,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         val response = given()
             .header("Authorization", apiKey)
-            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_introspect_v1+json")
             .body(request)
             .post("/introspect")
             .then()
@@ -198,7 +200,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
         val request = IntrospectRequestV1(authentication)
         val response = given()
             .header("Authorization", apiKey)
-            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_introspect_v1+json")
             .body(request)
             .post("/introspect")
             .then()
@@ -220,7 +222,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         given()
             .header("Authorization", apiKey)
-            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_introspect_v1+json")
             .body(request)
             .post("/introspect")
             .then()
@@ -238,7 +240,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         given()
             .header("Authorization", apiKey)
-            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_introspect_v1+json")
             .body(request)
             .post("/introspect")
             .then()
@@ -256,7 +258,7 @@ class AuthenticationIntegrationTest : IntegrationTest() {
 
         given()
             .header("Authorization", apiKey)
-            .contentType( "application/vnd.kaiqkt_auth_api_auth_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_introspect_v1+json")
             .body(request)
             .post("/introspect")
             .then()

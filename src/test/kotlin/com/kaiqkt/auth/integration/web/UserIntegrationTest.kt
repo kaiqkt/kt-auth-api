@@ -61,7 +61,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user")
@@ -82,7 +82,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user")
@@ -103,7 +103,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user")
@@ -124,7 +124,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(mapper.writeValueAsString(request))
             .post("/user")
@@ -142,7 +142,7 @@ class UserIntegrationTest : IntegrationTest() {
         userRepository.save(request.toDomain())
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(mapper.writeValueAsString(request))
             .post("/user")
@@ -162,7 +162,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user")
@@ -183,7 +183,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user")
@@ -204,7 +204,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user")
@@ -228,7 +228,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user/test_user_id/role")
@@ -249,7 +249,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user/${user.id}/role")
@@ -272,7 +272,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user/${user.id}/role")
@@ -296,7 +296,7 @@ class UserIntegrationTest : IntegrationTest() {
         val request = IdsRequestV1(listOf(role.id))
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .post("/user/${user.id}/role")
@@ -352,7 +352,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .patch("/user/test_user_id/role")
@@ -375,7 +375,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(request)
             .patch("/user/${user.id}/role")
@@ -491,7 +491,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(mapper.writeValueAsString(request))
             .patch("/user/password")
@@ -511,7 +511,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(mapper.writeValueAsString(request))
             .patch("/user/password")
@@ -536,7 +536,7 @@ class UserIntegrationTest : IntegrationTest() {
         val authentication = mockAuthentication()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${authentication.first}")
             .body(mapper.writeValueAsString(request))
             .patch("/user/password")
@@ -589,7 +589,7 @@ class UserIntegrationTest : IntegrationTest() {
         val request = UserRequestSampler.sample().copy(email = "invalid_email")
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .body(mapper.writeValueAsString(request))
             .post("/user/reset-password")
             .then()
@@ -609,7 +609,7 @@ class UserIntegrationTest : IntegrationTest() {
         val request = UserRequestSampler.sample().copy(email = user.email)
 
         given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .body(mapper.writeValueAsString(request))
             .post("/user/reset-password")
             .then()
@@ -623,7 +623,7 @@ class UserIntegrationTest : IntegrationTest() {
         val request = ResetPasswordRequestV1("Password@1234")
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .body(mapper.writeValueAsString(request))
             .post("/user/invalid_code/reset-password")
             .then()
@@ -645,7 +645,7 @@ class UserIntegrationTest : IntegrationTest() {
         val request = ResetPasswordRequestV1("Password@1236")
 
         given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .body(mapper.writeValueAsString(request))
             .post("/user/${verification.code}/reset-password")
             .then()
@@ -664,7 +664,7 @@ class UserIntegrationTest : IntegrationTest() {
         )
 
         given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_user_v1+json")
             .header("Authorization", "Bearer ${mockAuthentication().first}")
             .body(request)
             .patch("/user/password")
@@ -680,7 +680,6 @@ class UserIntegrationTest : IntegrationTest() {
         val expected = this::class.java.getResource("/static/reset-password-form.html")?.readText()
 
         val response = given()
-            .contentType("application/vnd.kaiqkt_auth_api_user_v1+json")
             .get("/user/123/reset-password-form")
             .then()
             .statusCode(200)

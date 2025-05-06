@@ -22,20 +22,20 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_role_v1+json:
+          application/vnd.kaiqkt_auth_role_v1+json:
             schema:
               $ref: '#/components/schemas/RoleRequestV1'
       responses:
         200:
           description: Role created
           content:
-            application/vnd.kaiqkt_auth_api_role_v1+json:
+            application/vnd.kaiqkt_auth_role_v1+json:
               schema:
                 $ref: '#/components/schemas/RoleResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /role/{id}:
@@ -56,26 +56,26 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_role_v1+json:
+          application/vnd.kaiqkt_auth_role_v1+json:
             schema:
               $ref: '#/components/schemas/UpdateRoleRequestV1'
       responses:
         200:
           description: Role updated
           content:
-            application/vnd.kaiqkt_auth_api_role_v1+json:
+            application/vnd.kaiqkt_auth_role_v1+json:
               schema:
                 $ref: '#/components/schemas/RoleResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
         404:
           description: Role not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /roles:
@@ -89,7 +89,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_role_v1+json:
+          application/vnd.kaiqkt_auth_role_v1+json:
             schema:
               $ref: '#/components/schemas/DeleteRolesRequestV1'
       responses:
@@ -138,13 +138,13 @@ paths:
         200:
           description: Roles found
           content:
-            application/vnd.kaiqkt_auth_api_page_v1+json:
+            application/vnd.kaiqkt_auth_roles_v1+json:
               schema:
                 $ref: '#/components/schemas/PageResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /login:
@@ -162,32 +162,32 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_auth_v1+json:
+          application/vnd.kaiqkt_auth_login_v1+json:
             schema:
               $ref: '#/components/schemas/LoginRequestV1'
       responses:
         200:
           description: User authenticated
           content:
-            application/vnd.kaiqkt_auth_api_auth_v1+json:
+            application/vnd.kaiqkt_auth_login_v1+json:
               schema:
                 $ref: '#/components/schemas/AuthenticationResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
         401:
           description: Invalid credential or email is not verified
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /refresh:
@@ -211,19 +211,19 @@ paths:
         200:
           description: Token refreshed
           content:
-            application/vnd.kaiqkt_auth_api_auth_v1+json:
+            application/vnd.kaiqkt_auth_refresh_v1+json:
               schema:
                 $ref: '#/components/schemas/AuthenticationResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
         401:
           description: Session not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /introspect:
@@ -237,20 +237,20 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_auth_v1+json:
+          application/vnd.kaiqkt_auth_introspect_v1+json:
             schema:
               $ref: '#/components/schemas/IntrospectRequestV1'
       responses:
         200:
           description: Session verified successfully
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/IntrospectResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /sessions:
@@ -297,13 +297,13 @@ paths:
         200:
           description: Sessions found
           content:
-            application/vnd.kaiqkt_auth_api_page_v1+json:
+            application/vnd.kaiqkt_auth_sessions_v1+json:
               schema:
                 $ref: '#/components/schemas/PageResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /session/{session_id}/revoke:
@@ -327,7 +327,7 @@ paths:
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /session/revoke/current:
@@ -344,7 +344,7 @@ paths:
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /sessions/revoke:
@@ -361,7 +361,7 @@ paths:
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /sessions/revoke/all:
@@ -375,7 +375,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_session_v1+json:
+          application/vnd.kaiqkt_auth_session_v1+json:
             schema:
               $ref: '#/components/schemas/IdsRequestV1'
       responses:
@@ -384,7 +384,7 @@ paths:
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /user:
@@ -398,20 +398,20 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_user_v1+json:
+          application/vnd.kaiqkt_auth_user_v1+json:
             schema:
               $ref: '#/components/schemas/UserRequestV1'
       responses:
         200:
           description: User created
           content:
-            application/vnd.kaiqkt_auth_api_user_v1+json:
+            application/vnd.kaiqkt_auth_user_v1+json:
               schema:
                 $ref: '#/components/schemas/UserResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
     get:
@@ -425,13 +425,13 @@ paths:
         200:
           description: User created
           content:
-            application/vnd.kaiqkt_auth_api_user_v1+json:
+            application/vnd.kaiqkt_auth_user_v1+json:
               schema:
                 $ref: '#/components/schemas/UserResponseV1'
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /user/{user_id}/role:
@@ -453,26 +453,26 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_user_v1+json:
+          application/vnd.kaiqkt_auth_user_v1+json:
             schema:
               $ref: '#/components/schemas/IdsRequestV1'
       responses:
         200:
           description: Roles added
           content:
-            application/vnd.kaiqkt_auth_api_user_v1+json:
+            application/vnd.kaiqkt_auth_user_v1+json:
               schema:
                 $ref: '#/components/schemas/UserResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
     patch:
@@ -493,26 +493,26 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_user_v1+json:
+          application/vnd.kaiqkt_auth_user_v1+json:
             schema:
               $ref: '#/components/schemas/IdsRequestV1'
       responses:
         200:
           description: Roles removed
           content:
-            application/vnd.kaiqkt_auth_api_user_v1+json:
+            application/vnd.kaiqkt_auth_user_v1+json:
               schema:
                 $ref: '#/components/schemas/UserResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /user/{user_id}:
@@ -537,7 +537,7 @@ paths:
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
     get:
@@ -559,13 +559,13 @@ paths:
         200:
           description: User found
           content:
-            application/vnd.kaiqkt_auth_api_user_v1+json:
+            application/vnd.kaiqkt_auth_user_v1+json:
               schema:
                 $ref: '#/components/schemas/UserResponseV1'
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /user/password:
@@ -579,26 +579,26 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_user_v1+json:
+          application/vnd.kaiqkt_auth_user_v1+json:
             schema:
               $ref: '#/components/schemas/PasswordRequestV1'
       responses:
         200:
           description: Roles added
           content:
-            application/vnd.kaiqkt_auth_api_user_v1+json:
+            application/vnd.kaiqkt_auth_user_v1+json:
               schema:
                 $ref: '#/components/schemas/UserResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /users:
@@ -645,13 +645,13 @@ paths:
         200:
           description: Users found
           content:
-            application/vnd.kaiqkt_auth_api_page_v1+json:
+            application/vnd.kaiqkt_auth_api_users_v1+json:
               schema:
                 $ref: '#/components/schemas/PageResponseV1'
         400:
           description: Invalid payload
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /user/verify-email:
@@ -691,7 +691,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_user_v1+json:
+          application/vnd.kaiqkt_auth_user_v1+json:
             schema:
               $ref: '#/components/schemas/SendResetPasswordRequestV1'
       responses:
@@ -700,7 +700,7 @@ paths:
         404:
           description: User not found
           content:
-            application/vnd.kaiqkt_auth_api_error_v1+json:
+            application/vnd.kaiqkt_auth_error_v1+json:
               schema:
                 $ref: '#/components/schemas/ErrorV1'
   /user/{code}/reset-password:
@@ -719,7 +719,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/vnd.kaiqkt_auth_api_user_v1+json:
+          application/vnd.kaiqkt_auth_user_v1+json:
             schema:
               $ref: '#/components/schemas/ResetPasswordRequestV1'
       responses:

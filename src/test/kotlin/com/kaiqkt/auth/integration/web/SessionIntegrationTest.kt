@@ -66,7 +66,7 @@ class SessionIntegrationTest : IntegrationTest() {
 
         given()
             .header("Authorization", "Bearer ${authentication.first}")
-            .contentType("application/vnd.kaiqkt_auth_api_session_v1+json")
+            .contentType("application/vnd.kaiqkt_auth_session_v1+json")
             .body(request)
             .patch("/sessions/revoke/all")
             .then()
